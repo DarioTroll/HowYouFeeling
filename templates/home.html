@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+    <script src="{{ url_for('static', filename='js/dark-mode.js') }}"></script>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+</head>
+<body>
+    <h1>Benvenuto</h1>
+    <div class="home-buttons">
+        <button onclick="window.location.href='/inserisci_dolore'">Dolore</button>
+        <button onclick="window.location.href='/inserisci_umore'">Umore</button>
+        <button onclick="window.location.href='/inserisci_sonno'">Sonno</button>
+    </div>
+    <div class="logout-button" style="margin-top: 20px; text-align: center;">
+        <button onclick="window.location.href='/logout'">Logout</button>
+        <button id="darkModeToggle" style="margin-top: 10px;">Attiva Dark Mode</button>
+    </div>
+</body>
+</html>

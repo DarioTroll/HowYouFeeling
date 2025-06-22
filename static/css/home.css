@@ -1,0 +1,104 @@
+/* home.css */
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    background-color: #fafafa;
+    padding: 20px;
+}
+
+h1 {
+    margin-bottom: 40px;
+    text-align: center;
+    color: #333;
+}
+
+.home-buttons {
+    display: grid;
+    grid-template-columns: repeat(3, 200px);
+    grid-template-rows: repeat(1, 60px);
+    gap: 25px 40px; /* row-gap column-gap */
+    justify-content: center;
+}
+
+.home-buttons button {
+    background-color: #007bff; /* blu */
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.2s ease;
+    width: 100%;
+    height: 100%;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.home-buttons button:hover {
+    background-color: #0056b3; /* blu scuro */
+    box-shadow: 0 6px 10px rgba(0,0,0,0.15);
+}
+
+.logout-button {
+    margin-top: 40px;
+    width: 680px;
+}
+
+.logout-button button {
+    background-color: #ff9800; /* arancione */
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.2s ease;
+    width: 100%;
+    height: 60px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.logout-button button:hover {
+    background-color: #e68900; /* arancione più scuro */
+    box-shadow: 0 6px 10px rgba(0,0,0,0.15);
+}
+
+/* === DARK MODE STYLES === */
+body.dark-mode {
+    background-color: #1e1e1e;
+    color: #eee;
+}
+
+body.dark-mode h1 {
+    color: #fff;
+}
+
+body.dark-mode .home-buttons button {
+    background-color: #444;
+    color: #fff;
+    box-shadow: 0 4px 6px rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .home-buttons button:hover {
+    background-color: #666;
+    box-shadow: 0 6px 10px rgba(255, 255, 255, 0.15);
+}
+
+body.dark-mode .logout-button button {
+    background-color: #aa5d00;
+    color: #fff;
+    box-shadow: 0 4px 6px rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .logout-button button:hover {
+    background-color: #884800;
+    box-shadow: 0 6px 10px rgba(255, 255, 255, 0.15);
+}
+
+

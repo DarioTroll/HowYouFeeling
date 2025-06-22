@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Visualizza Dolore</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/show.css') }}">
+    <script src="{{ url_for('static', filename='js/dark-mode.js') }}"></script>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+</head>
+<body>
+    <h2>Dati Dolore</h2>
+    <table>
+        <tr>
+            <th>Data</th>
+            <th>Ora</th>
+            <th>Testa</th>
+            <th>Mascella e Denti</th>
+            <th>Collo e Spalle</th>
+            <th>Braccia e Mani</th>
+            <th>Torace e Addome</th>
+            <th>Schiena</th>
+            <th>Gambe</th>
+        </tr>
+        {% macro color(val) -%}
+            <div class="color-box c{{ val }}"></div>
+        {%- endmacro %}
+        {% for row in dati %}
+        <tr>
+            <td>{{ row["data"] }}</td>
+            <td>{{ row["ora"] }}</td>
+            <td>
+                {{ color(row["viso"]) }}
+                {{ color(row["testa_fronte"]) }}
+                {{ color(row["testa_tempie_dx"]) }}
+                {{ color(row["testa_tempie_sx"]) }}
+                {{ color(row["testa_sommità"]) }}
+                {{ color(row["testa_occipite"]) }}
+                {{ color(row["nuca"]) }}
+            </td>
+            <td>
+                {{ color(row["mascella_dx"]) }}
+                {{ color(row["mascella_sx"]) }}
+                {{ color(row["denti"]) }}
+            </td>
+            <td>
+                {{ color(row["collo"]) }}
+                {{ color(row["spalla_dx"]) }}
+                {{ color(row["spalla_sx"]) }}
+            </td>
+            <td>
+                {{ color(row["braccio_superiore_dx"]) }}
+                {{ color(row["braccio_superiore_sx"]) }}
+                {{ color(row["braccio_inferiore_dx"]) }}
+                {{ color(row["braccio_inferiore_sx"]) }}
+                {{ color(row["gomito_dx"]) }}
+                {{ color(row["gomito_sx"]) }}
+                {{ color(row["polso_dx"]) }}
+                {{ color(row["polso_sx"]) }}
+                {{ color(row["mano_dx"]) }}
+                {{ color(row["mano_sx"]) }}
+                {{ color(row["dito_dx"]) }}
+                {{ color(row["dito_sx"]) }}
+            </td>
+            <td>
+                {{ color(row["petto_superiore_dx"]) }}
+                {{ color(row["petto_superiore_sx"]) }}
+                {{ color(row["petto_centrale"]) }}
+                {{ color(row["pancia"]) }}
+                {{ color(row["addome_superiore"]) }}
+                {{ color(row["addome_inferiore"]) }}
+            </td>
+            <td>
+                {{ color(row["schiena_superiore_dx"]) }}
+                {{ color(row["schiena_superiore_sx"]) }}
+                {{ color(row["schiena_inferiore_dx"]) }}
+                {{ color(row["schiena_inferiore_sx"]) }}
+                {{ color(row["sedere_dx"]) }}
+                {{ color(row["sedere_sx"]) }}
+            </td>
+            <td>
+                {{ color(row["gamba_superiore_dx"]) }}
+                {{ color(row["gamba_superiore_sx"]) }}
+                {{ color(row["ginocchio_dx"]) }}
+                {{ color(row["ginocchio_sx"]) }}
+                {{ color(row["polpaccio_dx"]) }}
+                {{ color(row["polpaccio_sx"]) }}
+                {{ color(row["caviglia_dx"]) }}
+                {{ color(row["caviglia_sx"]) }}
+                {{ color(row["piede_dx"]) }}
+                {{ color(row["piede_sx"]) }}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <div class="center-button">
+        <a class="button" href="/inserisci_dolore">← Inserisci dati</a>
+    </div>
+</body>
+</html>

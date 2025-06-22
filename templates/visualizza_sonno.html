@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Visualizza Sonno</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/show.css') }}">
+    <script src="{{ url_for('static', filename='js/dark-mode.js') }}"></script>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+</head>
+<body>
+    <h2>Dati Sonno</h2>
+    <table>
+        <tr>
+            <th>Data</th>
+            <th>Ora</th>
+            <th>Ora Inizio</th>
+            <th>Ora Fine</th>
+            <th>Qualità</th>
+        </tr>
+        {% for row in dati %}
+        <tr>
+            <td>{{ row["data"] }}</td>
+            <td>{{ row["ora"] }}</td>
+            <td>{{ row["ora_inizio"] }}</td>
+            <td>{{ row["ora_fine"] }}</td>
+            <td><div class="color-box c{{ row["qualita"] }}"></div></td>
+        </tr>
+        {% endfor %}
+    </table>
+    <div class="center-button">
+        <a class="button" href="/inserisci_sonno">← Inserisci dati</a>
+    </div>
+</body>
+</html>
+

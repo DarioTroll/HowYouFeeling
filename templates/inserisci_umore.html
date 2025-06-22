@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Inserisci Umore</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/insert.css') }}">
+    <script src="{{ url_for('static', filename='js/dark-mode.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/setDateTimeDefaults.js') }}"></script>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+</head>
+<body>
+    <h2>Inserisci Dati Umore</h2>
+
+    <form id="umoreForm" method="post">
+        <table>
+            <tr>
+                <td><label for="data">Data:</label></td>
+                <td><input type="date" name="data" id="data" required></td>
+            </tr>
+            <tr>
+                <td><label for="ora">Ora:</label></td>
+                <td><input type="time" name="ora" id="ora" required></td>
+            </tr>
+            <tr>
+                <td><label for="ansia">Ansia:</label></td>
+                <td>
+                    <input type="range" name="ansia" id="ansia" min="0" max="5" value="0" oninput="this.nextElementSibling.textContent=this.value">
+                    <span class="value">0</span>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="energia">Energia:</label></td>
+                <td>
+                    <input type="range" name="energia" id="energia" min="0" max="5" value="0" oninput="this.nextElementSibling.textContent=this.value">
+                    <span class="value">0</span>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="soddisfazione">Soddisfazione:</label></td>
+                <td>
+                    <input type="range" name="soddisfazione" id="soddisfazione" min="0" max="5" value="0" oninput="this.nextElementSibling.textContent=this.value">
+                    <span class="value">0</span>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="felicita">Felicità:</label></td>
+                <td>
+                    <input type="range" name="felicita" id="felicita" min="0" max="5" value="0" oninput="this.nextElementSibling.textContent=this.value">
+                    <span class="value">0</span>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="stress">Stress:</label></td>
+                <td>
+                    <input type="range" name="stress" id="stress" min="0" max="5" value="0" oninput="this.nextElementSibling.textContent=this.value">
+                    <span class="value">0</span>
+                </td>
+            </tr>
+        </table>
+        <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: center;">
+            <button type="button" onclick="window.location.href='/'">← Home</button>
+            <button type="submit">Salva</button>
+            <button type="button" onclick="window.location.href='/visualizza_umore'">Visualizza dati →</button>
+        </div>
+    </form>
+    <div style="text-align: center; margin-top: 30px;">
+        <img src="{{ url_for('static', filename='images/umore.png') }}" alt="Sonno" style="width: 150px; height: 150px; object-fit: cover; border-radius: 8px;">
+    </div>
+    <script src="{{ url_for('static', filename='js/formSubmitHandler.js') }}"></script>
+    <script>
+        handleFormSubmit('umoreForm', '/inserisci_umore', { reset: true, reload: true });
+    </script>
+</body>
+</html>

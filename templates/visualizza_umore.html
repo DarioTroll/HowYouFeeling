@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Visualizza Umore</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/show.css') }}">
+    <script src="{{ url_for('static', filename='js/dark-mode.js') }}"></script>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+</head>
+<body>
+    <h2>Dati Umore</h2>
+    <table>
+        <tr>
+            <th>Data</th>
+            <th>Ora</th>
+            <th>Ansia</th>
+            <th>Energia</th>
+            <th>Soddisfazione</th>
+            <th>Felicità</th>
+            <th>Stress</th>
+        </tr>
+        {% for row in dati %}
+        <tr>
+            <td>{{ row["data"] }}</td>
+            <td>{{ row["ora"] }}</td>
+            <td><div class="color-box c{{ row["ansia"] }}"></div></td>
+            <td><div class="color-box c{{ row["energia"] }}"></div></td>
+            <td><div class="color-box c{{ row["soddisfazione"] }}"></div></td>
+            <td><div class="color-box c{{ row["felicita"] }}"></div></td>
+            <td><div class="color-box c{{ row["stress"] }}"></div></td>
+        </tr>
+        {% endfor %}
+    </table>
+    <div class="center-button">
+        <a class="button" href="/inserisci_umore">← Inserisci dati</a>
+    </div>
+</body>
+</html>

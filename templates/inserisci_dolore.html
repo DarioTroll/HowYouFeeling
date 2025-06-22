@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Inserisci Dolore</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/insert.css') }}">
+    <script src="{{ url_for('static', filename='js/dark-mode.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/setDateTimeDefaults.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/toggleSections.js') }}"></script>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+</head>
+<body>
+    <h2>Inserisci Dati Dolore</h2>
+
+    <form id="doloreForm" method="post">
+        <table>
+            <tr>
+                <td><label for="data">Data:</label></td>
+                <td><input type="date" id="data" name="data" required></td>
+            </tr>
+            <tr>
+                <td><label for="ora">Ora:</label></td>
+                <td><input type="time" id="ora" name="ora" required></td>
+            </tr>
+        </table>
+
+        <!-- Testa -->
+        <div class="sezione">
+            <div class="sezione-header" onclick="toggleSection(this)">
+                Testa ▼
+            </div>
+            <div class="sezione-content">
+                <div class="immagine">
+                    <img src="{{ url_for('static', filename='images/testa.png') }}" alt="Testa" width="150">
+                </div>
+                <table>
+                    <tr><td>Viso</td><td><input type="range" name="viso" min="0" max="5" value="0" oninput="this.nextElementSibling.textContent=this.value"><span>0</span></td></tr>
+                    <tr><td>Fronte</td><td><input type="range" name="testa_fronte" min="0" max="5" value="0" oninput="this.nextElementSibling.textContent=this.value"><span>0</span></td></tr>
+                    <tr><td>Tempia dx</td><td><input type="range" name="testa_tempie_dx" min="0" max="5" value="0" oninput="this.nextElementSibling.textContent=this.value"><span>0</span></td></tr>
+                    <tr><td>Tempia sx</td><td><input type="range" name="testa_tempie_sx" min="0" max="5" value="0" oninput="this.nextElementSibling.textContent=this.value"><span>0</span></td></tr>
+                    <tr><td>Sommità</td><td><input type="range" name="testa_sommità" min="0" max="5" value="0" oninput="this.nextElementSibling.textContent=this.value"><span>0</span></td></tr>
+                    <tr><td>Occipite</td><td><input type="range" name="testa_occipite" min="0" max="5" value="0" oninput="this.nextElementSibling.textContent=this.value"><span>0</span></td></tr>
+                    <tr><td>Nuca</td><td><input type="range" name="nuca" min="0" max="5" value="0" oninput="this.nextElementSibling.textContent=this.value"><span>0</span></td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- Faccia -->
+        <div class="sezione">
+            <div class="sezione-header" onclick="toggleSection(this)">
+                Faccia ▼
+            </div>
+            <div class="sezione-content">
+                <div class="immagine">
+                    <img src="{{ url_for('static', filename='images/faccia.png') }}" alt="Faccia" width="150">
+                </div>
+                <table>
+                    <tr><td>Mascella dx</td><td><input type="range" name="mascella_dx" min="0" max="5" value="0" oninput="this.nextElementSibling.textContent=this.value"><span>0</span></td></tr>
+                    <tr><td>Mascella sx</td><td><input type="range" name="mascella_sx" min="0" max="5" value="0" oninput="this.nextElementSibling.textContent=this.value"><span>0</span></td></tr>
+                    <tr><td>Denti</td><td><input type="range" name="denti" min="0" max="5" value="0" oninput="this.nextElementSibling.textContent=this.value"><span>0</span></td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- Collo e spalle -->
+        <div class="sezione">
+            <div class="sezione-header" onclick="toggleSection(this)">
+                Spalle ▼
+            </div>
+            <div class="sezione-content">
+                <div class="immagine">
+                    <img src="{{ url_for('static', filename='images/spalle.png') }}" alt="Spalle" width="150">
+                </div>
+                <table>
+                    <tr><td>Collo</td><td><input type="range" name="collo" min="0" max="5" value="0" oninput="this.nextElementSibling.textContent=this.value"><span>0</span></td></tr>
+                    <tr><td>Spalla dx</td><td><input type="range" name="spalla_dx" min="0" max="5" value="0" oninput="this.nextElementSibling.textContent=this.value"><span>0</span></td></tr>
+                    <tr><td>Spalla sx</td><td><input type="range" name="spalla_sx" min="0" max="5" value="0" oninput="this.nextElementSibling.textContent=this.value"><span>0</span></td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- Braccia -->
+        <div class="sezione">
+            <div class="sezione-header" onclick="toggleSection(this)">
+                Braccia ▼
+            </div>
+            <div class="sezione-content">
+                <div class="immagine">
+                    <img src="{{ url_for('static', filename='images/braccia.png') }}" alt="Braccia" width="150">
+                </div>
+                <table>
+                    <tr><td>Braccio superiore dx</td><td><input type="range" name="braccio_superiore_dx" min="0" max="5" value="0" oninput="this.nextElementSibling.textContent=this.value"><span>0</span></td></tr>
+                    <tr><td>Braccio superiore sx</td><td><input type="range" name="braccio_superiore_sx" min="0" max="5" value="0" oninput="this.nextElementSibling.textContent=this.value"><span>0</span></td></tr>
+                    <tr><td>Braccio inferiore dx</td><td><input type="range" name="braccio_inferiore_dx" min="0" max="5" value="0" oninput="this.nextElementSibling.textContent=this.value"><span>0</span></td></tr>
+                    <tr><td>Braccio inferiore sx</td><td><input type="range" name="braccio_inferiore_sx" min="0" max="5" value="0" oninput="this.nextElementSibling.textContent=this.value"><span>0</span></td></tr>
+                    <tr><td>Gomito dx</td><td><input type="range" name="gomito_dx" min="0" max="5" value="0" oninput="this.nextElementSibling.textContent=this.value"><span>0</span></td></tr>
+                    <tr><td>Gomito sx</td><td><input type="range" name="gomito_sx" min="0" max="5" value="0" oninput="this.nextElementSibling.textContent=this.value"><span>0</span></td></tr>
+                    <tr><td>Polso dx</td><td><input type="range" name="polso_dx" min="0" max="5" value="0" oninput="this.nextElementSibling.textContent=this.value"><span>0</span></td></tr>
+                    <tr><td>Polso sx</td><td><input type="range" name="polso_sx" min="0" max="5" value="0" oninput="this.nextElementSibling.textContent=this.value"><span>0</span></td></tr>
+                    <tr><td>Mano dx</td><td><input type="range" name="mano_dx" min="0" max="5" value="0" oninput="this.nextElementSibling.textContent=this.value"><span>0</span></td></tr>
+                    <tr><td>Mano sx</td><td><input type="range" name="mano_sx" min="0" max="5" value="0" oninput="this.nextElementSibling.textContent=this.value"><span>0</span></td></tr>
+                    <tr><td>Dito dx</td><td><input type="range" name="dito_dx" min="0" max="5" value="0" oninput="this.nextElementSibling.textContent=this.value"><span>0</span></td></tr>
+                    <tr><td>Dito sx</td><td><input type="range" name="dito_sx" min="0" max="5" value="0" oninput="this.nextElementSibling.textContent=this.value"><span>0</span></td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- Torace e Addome -->
+        <div class="sezione">
+            <div class="sezione-header" onclick="toggleSection(this)">
+                Torace ▼
+            </div>
+            <div class="sezione-content">
+                <div class="immagine">
+                    <img src="{{ url_for('static', filename='images/torace.png') }}" alt="Torace e Addome" width="150">
+                </div>
+                <table>
+                    <tr><td>Petto superiore dx</td><td><input type="range" name="petto_superiore_dx" min="0" max="5" value="0" oninput="this.nextElementSibling.textContent=this.value"><span>0</span></td></tr>
+                    <tr><td>Petto superiore sx</td><td><input type="range" name="petto_superiore_sx" min="0" max="5" value="0" oninput="this.nextElementSibling.textContent=this.value"><span>0</span></td></tr>
+                    <tr><td>Petto centrale</td><td><input type="range" name="petto_centrale" min="0" max="5" value="0" oninput="this.nextElementSibling.textContent=this.value"><span>0</span></td></tr>
+                    <tr><td>Pancia</td><td><input type="range" name="pancia" min="0" max="5" value="0" oninput="this.nextElementSibling.textContent=this.value"><span>0</span></td></tr>
+                    <tr><td>Addome superiore</td><td><input type="range" name="addome_superiore" min="0" max="5" value="0" oninput="this.nextElementSibling.textContent=this.value"><span>0</span></td></tr>
+                    <tr><td>Addome inferiore</td><td><input type="range" name="addome_inferiore" min="0" max="5" value="0" oninput="this.nextElementSibling.textContent=this.value"><span>0</span></td></tr>
+                </table>
+            </div>
+        </div>
+
+
+        <!-- Schiena -->
+        <div class="sezione">
+            <div class="sezione-header" onclick="toggleSection(this)">
+                Schiena ▼
+            </div>
+            <div class="sezione-content">
+                <div class="immagine">
+                    <img src="{{ url_for('static', filename='images/schiena.png') }}" alt="Schiena" width="150">
+                </div>
+                <table>
+                    <tr><td>Schiena superiore dx</td><td><input type="range" name="schiena_superiore_dx" min="0" max="5" value="0" oninput="this.nextElementSibling.textContent=this.value"><span>0</span></td></tr>
+                    <tr><td>Schiena superiore sx</td><td><input type="range" name="schiena_superiore_sx" min="0" max="5" value="0" oninput="this.nextElementSibling.textContent=this.value"><span>0</span></td></tr>
+                    <tr><td>Schiena inferiore dx</td><td><input type="range" name="schiena_inferiore_dx" min="0" max="5" value="0" oninput="this.nextElementSibling.textContent=this.value"><span>0</span></td></tr>
+                    <tr><td>Schiena inferiore sx</td><td><input type="range" name="schiena_inferiore_sx" min="0" max="5" value="0" oninput="this.nextElementSibling.textContent=this.value"><span>0</span></td></tr>
+                    <tr><td>Sedere dx</td><td><input type="range" name="sedere_dx" min="0" max="5" value="0" oninput="this.nextElementSibling.textContent=this.value"><span>0</span></td></tr>
+                    <tr><td>Sedere sx</td><td><input type="range" name="sedere_sx" min="0" max="5" value="0" oninput="this.nextElementSibling.textContent=this.value"><span>0</span></td></tr>
+                </table>
+            </div>
+        </div>
+
+
+        <!-- Gambe -->
+        <div class="sezione">
+            <div class="sezione-header" onclick="toggleSection(this)">
+                Gambe ▼
+            </div>
+            <div class="sezione-content">
+                <div class="immagine">
+                    <img src="{{ url_for('static', filename='images/gambe.png') }}" alt="Gambe" width="150">
+                </div>
+                <table>
+                    <tr><td>Gamba superiore dx</td><td><input type="range" name="gamba_superiore_dx" min="0" max="5" value="0" oninput="this.nextElementSibling.textContent=this.value"><span>0</span></td></tr>
+                    <tr><td>Gamba superiore sx</td><td><input type="range" name="gamba_superiore_sx" min="0" max="5" value="0" oninput="this.nextElementSibling.textContent=this.value"><span>0</span></td></tr>
+                    <tr><td>Ginocchio dx</td><td><input type="range" name="ginocchio_dx" min="0" max="5" value="0" oninput="this.nextElementSibling.textContent=this.value"><span>0</span></td></tr>
+                    <tr><td>Ginocchio sx</td><td><input type="range" name="ginocchio_sx" min="0" max="5" value="0" oninput="this.nextElementSibling.textContent=this.value"><span>0</span></td></tr>
+                    <tr><td>Polpaccio dx</td><td><input type="range" name="polpaccio_dx" min="0" max="5" value="0" oninput="this.nextElementSibling.textContent=this.value"><span>0</span></td></tr>
+                    <tr><td>Polpaccio sx</td><td><input type="range" name="polpaccio_sx" min="0" max="5" value="0" oninput="this.nextElementSibling.textContent=this.value"><span>0</span></td></tr>
+                    <tr><td>Caviglia dx</td><td><input type="range" name="caviglia_dx" min="0" max="5" value="0" oninput="this.nextElementSibling.textContent=this.value"><span>0</span></td></tr>
+                    <tr><td>Caviglia sx</td><td><input type="range" name="caviglia_sx" min="0" max="5" value="0" oninput="this.nextElementSibling.textContent=this.value"><span>0</span></td></tr>
+                    <tr><td>Piede dx</td><td><input type="range" name="piede_dx" min="0" max="5" value="0" oninput="this.nextElementSibling.textContent=this.value"><span>0</span></td></tr>
+                    <tr><td>Piede sx</td><td><input type="range" name="piede_sx" min="0" max="5" value="0" oninput="this.nextElementSibling.textContent=this.value"><span>0</span></td></tr>
+                </table>
+            </div>
+        </div>
+
+        <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: center;">
+            <button type="button" onclick="window.location.href='/'">← Home</button>
+            <button type="submit">Salva</button>
+            <button type="button" onclick="window.location.href='/visualizza_dolore'">Visualizza dati →</button>
+        </div>
+
+    </form>
+
+    <script src="{{ url_for('static', filename='js/formSubmitHandler.js') }}"></script>
+    <script>
+        handleFormSubmit('doloreForm', '/inserisci_dolore', { reload: true, feedbackId: 'feedback' });
+    </script>
+</body>
+</html>

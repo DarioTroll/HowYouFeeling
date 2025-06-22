@@ -1,0 +1,96 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    table-layout: fixed;
+}
+
+th, td {
+    border: 1px solid #999;
+    padding: 6px;
+    text-align: center;
+    vertical-align: middle;
+    word-wrap: break-word;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+h2 {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.color-box {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin: 1px;
+    border-radius: 2px;
+}
+
+.c0 { background-color: #ffffff; }
+.c1 { background-color: #ffcccc; }
+.c2 { background-color: #ff9999; }
+.c3 { background-color: #ff6666; }
+.c4 { background-color: #ff3333; }
+.c5 { background-color: #cc0000; }
+
+.center-button {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #555555;  /* grigio scuro */
+    color: white;
+    text-decoration: none;
+    border: none;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    background-color: #333333;  /* più scuro al passaggio */
+}
+
+/* === DARK MODE STYLES === */
+body.dark-mode {
+    background-color: #1a1a1a;
+    color: #f0f0f0;
+}
+
+body.dark-mode table {
+    border-color: #666;
+    background-color: #2a2a2a;
+}
+
+body.dark-mode th {
+    background-color: #444;
+    color: #f0f0f0;
+}
+
+body.dark-mode td {
+    border-color: #555;
+    color: #e0e0e0;
+    background-color: #1e1e1e;
+}
+
+body.dark-mode .button {
+    background-color: #4a90e2;
+    color: white;
+}
+
+body.dark-mode .button:hover {
+    background-color: #357ab8;
+}
+
+/* Color boxes remain the same for consistency */
+

@@ -1,0 +1,151 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+
+/* --- Stili per pagina inserisci dolori e simili --- */
+
+h2 {
+    text-align: center;
+}
+
+form {
+    width: 80%;
+    max-width: 800px;
+    margin: auto;
+}
+
+.sezione {
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.sezione-header {
+    background-color: #f0f0f0;
+    cursor: pointer;
+    padding: 10px 15px;
+    font-weight: bold;
+    user-select: none;
+}
+
+.sezione-content {
+    padding: 10px 15px;
+    display: none; /* inizialmente nascosto */
+}
+
+.immagine {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+td {
+    padding: 10px;
+    vertical-align: middle;
+    border-bottom: 1px solid #ccc;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+}
+
+input[type="range"] {
+    width: 100%;
+}
+
+button {
+    display: block;
+    margin: 30px auto;
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+button[type="submit"] {
+    background-color: #28a745; /* verde brillante */
+    color: white;              /* testo bianco */
+    border: none;              /* niente bordo */
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;        /* angoli arrotondati */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: #218838; /* verde scuro al passaggio del mouse */
+}
+
+/* === DARK MODE STYLES === */
+body.dark-mode {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+}
+
+body.dark-mode .sezione {
+    border-color: #444;
+    background-color: #2a2a2a;
+}
+
+body.dark-mode .sezione-header {
+    background-color: #333;
+    color: #fff;
+}
+
+body.dark-mode .sezione-content {
+    background-color: #2a2a2a;
+}
+
+body.dark-mode table {
+    border-color: #555;
+}
+
+body.dark-mode td {
+    border-bottom: 1px solid #555;
+}
+
+body.dark-mode label {
+    color: #ddd;
+}
+
+body.dark-mode input,
+body.dark-mode select,
+body.dark-mode textarea {
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #666;
+}
+
+body.dark-mode input[type="range"] {
+    background-color: #444;
+}
+
+body.dark-mode button[type="submit"] {
+    background-color: #4caf50;
+    color: #fff;
+}
+
+body.dark-mode button[type="submit"]:hover {
+    background-color: #388e3c;
+}
+
+body.dark-mode button {
+    background-color: #555;
+    color: #fff;
+}
+
+body.dark-mode button:hover {
+    background-color: #777;
+}
+
