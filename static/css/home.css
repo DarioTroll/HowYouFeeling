@@ -69,6 +69,30 @@ h1 {
     box-shadow: 0 6px 10px rgba(0,0,0,0.15);
 }
 
+.report-button {
+    margin-top: 20px;
+    width: 680px;
+}
+
+.report-button button {
+    background-color: #28a745; /* verde */
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.2s ease;
+    width: 100%;
+    height: 60px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.report-button button:hover {
+    background-color: #218838; /* verde più scuro */
+    box-shadow: 0 6px 10px rgba(0,0,0,0.15);
+}
+
 /* === DARK MODE STYLES === */
 body.dark-mode {
     background-color: #1e1e1e;
@@ -101,4 +125,14 @@ body.dark-mode .logout-button button:hover {
     box-shadow: 0 6px 10px rgba(255, 255, 255, 0.15);
 }
 
+body.dark-mode .report-button button {
+    background-color: #1e7e34;
+    color: #fff;
+    box-shadow: 0 4px 6px rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .report-button button:hover {
+    background-color: #155724;
+    box-shadow: 0 6px 10px rgba(255, 255, 255, 0.15);
+}
 

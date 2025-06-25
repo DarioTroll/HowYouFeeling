@@ -1,9 +1,18 @@
-from flask import Flask, render_template, request, redirect, jsonify, session, url_for
+from flask import Flask, render_template, request, redirect, jsonify, session, url_for, send_file
 from dotenv import load_dotenv
 from functools import wraps
+from datetime import datetime, timedelta
+from io import BytesIO
+from openpyxl.styles import Alignment, Font
+from openpyxl.utils import get_column_letter
+from openpyxl.worksheet.table import Table, TableStyleInfo
+from openpyxl import Workbook
+import openpyxl
 import os
 import mysql.connector
 import hashlib
+import pandas as pd
+
 
 load_dotenv()
 
@@ -226,5 +235,336 @@ def visualizza_sonno():
     dati = cursor.fetchall()
     return render_template("visualizza_sonno.html", dati=dati)
 
+# --- GENERAZIONE REPORT EXCEL
+@app.route("/scarica_report_excel")
+@login_required
+def scarica_report_excel():
+    due_settimane_fa = datetime.now() - timedelta(weeks=2)
+    data_limite = due_settimane_fa.strftime('%Y-%m-%d')
+    data_inizio = "2025-06-01"  # replace with actual start date
+    data_fine = datetime.now().strftime('%Y-%m-%d')
+
+    cursor.execute("SELECT * FROM Dolore WHERE data >= %s", (data_limite,))
+    dolore = cursor.fetchall()
+    colonne_dolore = [desc[0] for desc in cursor.description]
+    df_dolore = pd.DataFrame(dolore, columns=colonne_dolore)
+    dati_dolore = df_dolore.to_dict(orient="records")
+
+    cursor.execute("SELECT * FROM Umore WHERE data >= %s", (data_limite,))
+    umore = cursor.fetchall()
+    colonne_umore = [desc[0] for desc in cursor.description]
+    df_umore = pd.DataFrame(umore, columns=colonne_umore)
+    dati_umore = df_umore.to_dict(orient="records")
+
+    cursor.execute("SELECT * FROM Sonno WHERE data >= %s", (data_limite,))
+    sonno = cursor.fetchall()
+    colonne_sonno = [desc[0] for desc in cursor.description]
+    df_sonno = pd.DataFrame(sonno, columns=colonne_sonno)
+    dati_sonno = df_sonno.to_dict(orient="records")
+
+    output = genera_report_excel_unico(
+        dati_dolore, dati_umore, dati_sonno, data_inizio, data_fine
+    )
+
+    filename = f"Report Dario Trinchese ({data_inizio}) ({data_fine}).xlsx"
+    return send_file(
+        output,
+        as_attachment=True,
+        download_name=filename,
+        mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+
+
+def genera_report_excel_unico(data_dolore, data_umore, data_sonno, data_inizio, data_fine):
+    from openpyxl.styles import PatternFill, Alignment, Font, Border, Side
+    from openpyxl.utils import get_column_letter
+    from openpyxl import Workbook
+    from io import BytesIO
+
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Report Formattato"
+
+    # Strong color shades (0 to 5)
+    red_shades = {
+        0: "FFFFFF",
+        1: "FFB3B3",
+        2: "FF6666",
+        3: "FF1A1A",
+        4: "CC0000",
+        5: "800000"
+    }
+    green_shades = {
+        0: "FFFFFF",
+        1: "B3FFB3",
+        2: "66FF66",
+        3: "1AFF1A",
+        4: "00CC00",
+        5: "006600"
+    }
+    cyan_shades = {
+        0: "FFFFFF",
+        1: "B3FFFF",
+        2: "66FFFF",
+        3: "1AFFFF",
+        4: "00CCCC",
+        5: "006666"
+    }
+
+    # Border styles
+    thin = Side(border_style="thin", color="000000")
+    medium = Side(border_style="medium", color="000000")
+    thick = Side(border_style="thick", color="000000")
+
+    # --- INFO ROW ---
+    # We'll need to know the widest table for merging cells:
+    def get_final_columns_dolore():
+        fixed_columns = ["data", "ora"]
+        macro_areas = {
+            "Testa": ["viso", "testa_fronte", "testa_tempie_dx", "testa_tempie_sx", "testa_sommità", "testa_occipite", "nuca"],
+            "Mascella e Denti": ["mascella_dx", "mascella_sx", "denti"],
+            "Collo e Spalle": ["collo", "spalla_dx", "spalla_sx"],
+            "Braccia e Mani": [
+                "braccio_superiore_dx", "braccio_superiore_sx", "braccio_inferiore_dx", "braccio_inferiore_sx",
+                "gomito_dx", "gomito_sx", "polso_dx", "polso_sx", "mano_dx", "mano_sx", "dito_dx", "dito_sx"
+            ],
+            "Torace e Addome": ["petto_superiore_dx", "petto_superiore_sx", "petto_centrale", "pancia",
+                                "addome_superiore", "addome_inferiore"],
+            "Schiena": ["schiena_superiore_dx", "schiena_superiore_sx", "schiena_inferiore_dx", "schiena_inferiore_sx",
+                        "sedere_dx", "sedere_sx"],
+            "Gambe": ["gamba_superiore_dx", "gamba_superiore_sx", "ginocchio_dx", "ginocchio_sx",
+                      "polpaccio_dx", "polpaccio_sx", "caviglia_dx", "caviglia_sx", "piede_dx", "piede_sx"]
+        }
+        final_cols = fixed_columns[:]
+        macro_labels = [""] * len(fixed_columns)
+        for area, columns in macro_areas.items():
+            final_cols.append("")  # spacer
+            macro_labels.append("")   # spacer
+            final_cols.extend(columns)
+            macro_labels.append(area)
+            macro_labels.extend([""] * (len(columns) - 1))
+        return final_cols
+
+    final_columns_dolore = get_final_columns_dolore()
+    final_columns_umore = ["data", "ora", "ansia", "energia", "soddisfazione", "felicita", "stress"]
+    final_columns_sonno = ["data", "ora", "ora_inizio", "ora_fine", "qualita"]
+
+    max_columns = max(len(final_columns_dolore), len(final_columns_umore), len(final_columns_sonno))
+
+    info_text = f"Report di Dario Trinchese dal {data_inizio} al {data_fine}"
+    ws.merge_cells(start_row=1, start_column=1, end_row=1, end_column=max_columns)
+    cell = ws.cell(row=1, column=1, value=info_text)
+    cell.font = Font(bold=True, size=12)
+    cell.alignment = Alignment(horizontal="left", vertical="center")
+
+    current_row = 3  # Start a bit below the info row
+
+    # --- Helper function to apply borders for a table block ---
+    def apply_borders(ws, start_row, start_col, n_rows, n_cols):
+        for r in range(start_row, start_row + n_rows):
+            for c in range(start_col, start_col + n_cols):
+                left = thin
+                right = thin
+                top = thin
+                bottom = thin
+                if c == start_col:
+                    left = medium
+                if c == start_col + n_cols - 1:
+                    right = medium
+                if r == start_row:
+                    top = medium
+                if r == start_row + n_rows - 1:
+                    bottom = medium
+                ws.cell(row=r, column=c).border = Border(left=left, right=right, top=top, bottom=bottom)
+
+    # --- FUNCTION TO WRITE DOLORI TABLE ---
+    def write_dolori(start_row):
+        ws.cell(row=start_row, column=1, value="Dolori").font = Font(bold=True)
+        ws.cell(row=start_row, column=1).alignment = Alignment(horizontal="left")
+        table_start_row = start_row + 2  # table headers start here
+
+        # Macro-area labels for row 2 and column headers row 3
+        fixed_columns = ["data", "ora"]
+        macro_areas = {
+            "Testa": ["viso", "testa_fronte", "testa_tempie_dx", "testa_tempie_sx", "testa_sommità", "testa_occipite", "nuca"],
+            "Mascella e Denti": ["mascella_dx", "mascella_sx", "denti"],
+            "Collo e Spalle": ["collo", "spalla_dx", "spalla_sx"],
+            "Braccia e Mani": [
+                "braccio_superiore_dx", "braccio_superiore_sx", "braccio_inferiore_dx", "braccio_inferiore_sx",
+                "gomito_dx", "gomito_sx", "polso_dx", "polso_sx", "mano_dx", "mano_sx", "dito_dx", "dito_sx"
+            ],
+            "Torace e Addome": ["petto_superiore_dx", "petto_superiore_sx", "petto_centrale", "pancia",
+                                "addome_superiore", "addome_inferiore"],
+            "Schiena": ["schiena_superiore_dx", "schiena_superiore_sx", "schiena_inferiore_dx", "schiena_inferiore_sx",
+                        "sedere_dx", "sedere_sx"],
+            "Gambe": ["gamba_superiore_dx", "gamba_superiore_sx", "ginocchio_dx", "ginocchio_sx",
+                      "polpaccio_dx", "polpaccio_sx", "caviglia_dx", "caviglia_sx", "piede_dx", "piede_sx"]
+        }
+
+        final_columns = fixed_columns[:]
+        macro_labels = [""] * len(fixed_columns)
+        for area, columns in macro_areas.items():
+            final_columns.append("")  # spacer
+            macro_labels.append("")   # spacer
+            final_columns.extend(columns)
+            macro_labels.append(area)
+            macro_labels.extend([""] * (len(columns) - 1))
+
+        max_col = len(final_columns)
+
+        # Title row 2 (macro-area headers)
+        for col_idx, label in enumerate(macro_labels, start=1):
+            if label != "":
+                span = 1
+                while col_idx + span - 1 < len(macro_labels) and macro_labels[col_idx + span - 1] == "":
+                    span += 1
+                end_col = col_idx + span - 1
+                if end_col > col_idx:
+                    ws.merge_cells(start_row=table_start_row, start_column=col_idx, end_row=table_start_row, end_column=end_col)
+                cell = ws.cell(row=table_start_row, column=col_idx, value=label)
+                cell.font = Font(bold=True)
+                cell.alignment = Alignment(horizontal="center", vertical="center")
+                # Skip next merged columns
+                for skip_col in range(col_idx + 1, end_col + 1):
+                    macro_labels[skip_col - 1] = None
+            if macro_labels[col_idx - 1] is None:
+                continue
+
+        # Title row 3 (column names)
+        col_headers_row = table_start_row + 1
+        for col_idx, col_name in enumerate(final_columns, start=1):
+            if col_name == "":
+                # Just empty spacer column
+                ws.cell(row=col_headers_row, column=col_idx, value="")
+            else:
+                ws.cell(row=col_headers_row, column=col_idx, value=col_name)
+            ws.cell(row=col_headers_row, column=col_idx).font = Font(bold=True)
+            ws.cell(row=col_headers_row, column=col_idx).alignment = Alignment(horizontal="center")
+
+        # Write data rows
+        data_start_row = col_headers_row + 1
+        for row_idx, record in enumerate(data_dolore, start=data_start_row):
+            for col_idx, col_name in enumerate(final_columns, start=1):
+                if col_name == "":
+                    ws.cell(row=row_idx, column=col_idx, value=None)
+                    continue
+                val = record.get(col_name, "")
+                ws.cell(row=row_idx, column=col_idx, value=val)
+
+                # Color numeric 0-5 in red shades (only if val is int and in 0..5)
+                if isinstance(val, (int, float)) and (0 <= val <= 5) and val == int(val):
+                    hex_color = red_shades[int(val)]
+                    ws.cell(row=row_idx, column=col_idx).fill = PatternFill(start_color=hex_color, end_color=hex_color, fill_type="solid")
+
+                ws.cell(row=row_idx, column=col_idx).alignment = Alignment(horizontal="center", vertical="center")
+
+        n_rows = len(data_dolore) + (data_start_row - table_start_row) + 1
+        n_cols = max_col
+        apply_borders(ws, table_start_row, 1, n_rows, n_cols)
+
+        return table_start_row, n_rows, n_cols
+
+    # --- FUNCTION TO WRITE UMORE TABLE ---
+    def write_umore(start_row):
+        ws.cell(row=start_row, column=1, value="Umore").font = Font(bold=True)
+        ws.cell(row=start_row, column=1).alignment = Alignment(horizontal="left")
+        table_start_row = start_row + 2
+
+        columns = ["data", "ora", "ansia", "energia", "soddisfazione", "felicita", "stress"]
+        max_col = len(columns)
+
+        # Headers
+        for col_idx, col_name in enumerate(columns, start=1):
+            ws.cell(row=table_start_row, column=col_idx, value=col_name)
+            ws.cell(row=table_start_row, column=col_idx).font = Font(bold=True)
+            ws.cell(row=table_start_row, column=col_idx).alignment = Alignment(horizontal="center")
+
+        # Data rows
+        data_start_row = table_start_row + 1
+        for row_idx, record in enumerate(data_umore, start=data_start_row):
+            for col_idx, col_name in enumerate(columns, start=1):
+                val = record.get(col_name, "")
+                ws.cell(row=row_idx, column=col_idx, value=val)
+
+                # Color numeric 0-5 in green shades (only if val is int and in 0..5)
+                if isinstance(val, (int, float)) and (0 <= val <= 5) and val == int(val):
+                    hex_color = green_shades[int(val)]
+                    ws.cell(row=row_idx, column=col_idx).fill = PatternFill(start_color=hex_color, end_color=hex_color, fill_type="solid")
+
+                ws.cell(row=row_idx, column=col_idx).alignment = Alignment(horizontal="center", vertical="center")
+
+        n_rows = len(data_umore) + (data_start_row - table_start_row) + 1
+        n_cols = max_col
+        apply_borders(ws, table_start_row, 1, n_rows, n_cols)
+
+        return table_start_row, n_rows, n_cols
+
+    # --- FUNCTION TO WRITE SONNO TABLE ---
+    def write_sonno(start_row):
+        ws.cell(row=start_row, column=1, value="Sonno").font = Font(bold=True)
+        ws.cell(row=start_row, column=1).alignment = Alignment(horizontal="left")
+        table_start_row = start_row + 2
+
+        columns = ["data", "ora", "ora_inizio", "ora_fine", "qualita"]
+        max_col = len(columns)
+
+        # Headers
+        for col_idx, col_name in enumerate(columns, start=1):
+            ws.cell(row=table_start_row, column=col_idx, value=col_name)
+            ws.cell(row=table_start_row, column=col_idx).font = Font(bold=True)
+            ws.cell(row=table_start_row, column=col_idx).alignment = Alignment(horizontal="center")
+
+        # Data rows
+        data_start_row = table_start_row + 1
+        for row_idx, record in enumerate(data_sonno, start=data_start_row):
+            for col_idx, col_name in enumerate(columns, start=1):
+                val = record.get(col_name, "")
+                ws.cell(row=row_idx, column=col_idx, value=val)
+
+                # Color numeric 0-5 in cyan shades (only if val is int and in 0..5)
+                if isinstance(val, (int, float)) and (0 <= val <= 5) and val == int(val):
+                    hex_color = cyan_shades[int(val)]
+                    ws.cell(row=row_idx, column=col_idx).fill = PatternFill(start_color=hex_color, end_color=hex_color, fill_type="solid")
+
+                ws.cell(row=row_idx, column=col_idx).alignment = Alignment(horizontal="center", vertical="center")
+
+        n_rows = len(data_sonno) + (data_start_row - table_start_row) + 1
+        n_cols = max_col
+        apply_borders(ws, table_start_row, 1, n_rows, n_cols)
+
+        return table_start_row, n_rows, n_cols
+
+    # Write Dolori table
+    start_dolori = current_row
+    dolori_header_row, dolori_n_rows, dolori_n_cols = write_dolori(start_dolori)
+
+    # Leave 3 blank rows between tables
+    start_umore = dolori_header_row + dolori_n_rows + 3
+    umore_header_row, umore_n_rows, umore_n_cols = write_umore(start_umore)
+
+    start_sonno = umore_header_row + umore_n_rows + 3
+    sonno_header_row, sonno_n_rows, sonno_n_cols = write_sonno(start_sonno)
+
+    # Adjust column widths to fit contents for all columns used in all tables
+    max_cols_used = max(dolori_n_cols, umore_n_cols, sonno_n_cols)
+    for col_idx in range(1, max_cols_used + 1):
+        max_length = 0
+        for row_idx in range(1, ws.max_row + 1):
+            cell = ws.cell(row=row_idx, column=col_idx)
+            if cell.value is not None:
+                cell_length = len(str(cell.value))
+                if cell_length > max_length:
+                    max_length = cell_length
+        adjusted_width = max_length + 2
+        ws.column_dimensions[get_column_letter(col_idx)].width = adjusted_width
+
+    # Save to BytesIO
+    output = BytesIO()
+    wb.save(output)
+    output.seek(0)
+    return output
+
+
+# --- MAIN ---
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)
