@@ -2,6 +2,7 @@ body {
     font-family: Arial, sans-serif;
 }
 
+/* === TABELLE DATI === */
 table {
     border-collapse: collapse;
     width: 100%;
@@ -25,6 +26,7 @@ h2 {
     margin-top: 20px;
 }
 
+/* === COLOR BOXES === */
 .color-box {
     display: inline-block;
     width: 12px;
@@ -40,6 +42,7 @@ h2 {
 .c4 { background-color: #ff3333; }
 .c5 { background-color: #cc0000; }
 
+/* === BUTTONS === */
 .center-button {
     text-align: center;
     margin-top: 20px;
@@ -61,7 +64,7 @@ h2 {
     background-color: #333333;  /* più scuro al passaggio */
 }
 
-/* === DARK MODE STYLES === */
+/* === DARK MODE === */
 body.dark-mode {
     background-color: #1a1a1a;
     color: #f0f0f0;
@@ -92,5 +95,39 @@ body.dark-mode .button:hover {
     background-color: #357ab8;
 }
 
-/* Color boxes remain the same for consistency */
+/* === NOTE LETTERA STYLE === */
+.nota-box {
+    background-color: #fff;
+    border-left: 5px solid #4a90e2;
+    padding: 16px;
+    margin: 20px auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    max-width: 700px;
+}
 
+.nota-header {
+    font-size: 0.95em;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.nota-testo {
+    white-space: pre-wrap;
+    font-size: 1.05em;
+    color: #333;
+}
+
+body.dark-mode .nota-box {
+    background-color: #2a2a2a;
+    border-left-color: #4a90e2;
+    box-shadow: 0 2px 8px rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .nota-header {
+    color: #aaa;
+}
+
+body.dark-mode .nota-testo {
+    color: #eee;
+}

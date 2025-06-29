@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Inserisci Nota</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/insert.css') }}">
+    <script src="{{ url_for('static', filename='js/dark-mode.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/setDateTimeDefaults.js') }}"></script>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+</head>
+<body>
+    <h2>Inserisci Nota Giornaliera</h2>
+    <form id="notaForm" method="post">
+        <table>
+            <tr>
+                <td>Data:</td>
+                <td><input type="date" id="data" name="data" required></td>
+            </tr>
+            <tr>
+                <td>Ora:</td>
+                <td><input type="time" id="ora" name="ora" required></td>
+            </tr>
+            <tr>
+                <td>Commento:</td>
+                <td>
+                    <textarea name="commento" rows="5" cols="40" placeholder="Scrivi qui il tuo commento..." required></textarea>
+                </td>
+            </tr>
+        </table>
+
+        <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: center;">
+            <button type="button" onclick="window.location.href='/'">← Home</button>
+            <button type="submit">Salva</button>
+            <button type="button" onclick="window.location.href='/visualizza_nota'">Visualizza note →</button>
+        </div>
+    </form>
+
+    <div style="text-align: center; margin-top: 30px;">
+        <img src="{{ url_for('static', filename='images/nota.png') }}" alt="Note" style="width: 150px; height: 150px; object-fit: cover; border-radius: 8px;">
+    </div>
+    <script src="{{ url_for('static', filename='js/formSubmitHandler.js') }}"></script>
+    <script>
+        handleFormSubmit('notaForm', '/inserisci_nota', { reload: true });
+    </script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Visualizza Note</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/show.css') }}">
+    <script src="{{ url_for('static', filename='js/dark-mode.js') }}"></script>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+</head>
+<body>
+    <h2>Note Giornaliere</h2>
+
+    {% for nota in dati %}
+    <div class="nota-box">
+        <div class="nota-header">{{ nota["data"] }} – {{ nota["ora"] }}</div>
+        <div class="nota-testo">{{ nota["testo"] }}</div>
+    </div>
+    {% endfor %}
+
+    <div class="center-button">
+        <a class="button" href="/inserisci_nota">← Inserisci nuova nota</a>
+    </div>
+</body>
+</html>

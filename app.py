@@ -213,6 +213,26 @@ def inserisci_sonno():
 
     return render_template("inserisci_sonno.html")
 
+@app.route("/inserisci_nota", methods=["GET", "POST"])
+@login_required
+def inserisci_nota():
+    if request.method == "POST":
+        data = request.form.get("data", 0)
+        ora = request.form.get("ora", 0)
+        testo = request.form.get("commento", "")
+
+        try:
+            cursor.execute("""
+                INSERT INTO Nota (data, ora, testo)
+                VALUES (%s, %s, %s)
+            """, (data, ora, testo))
+            conn.commit()
+            return jsonify({"success": True, "message": "Nota inserita con successo!"})
+        except Exception as e:
+            return jsonify({"success": False, "message": f"Errore durante l'inserimento: {str(e)}"})
+
+    return render_template("inserisci_nota.html")
+
 # --- VISUALIZZAZIONE ---
 @app.route("/visualizza_dolore")
 @login_required
@@ -234,6 +254,14 @@ def visualizza_sonno():
     cursor.execute("SELECT * FROM Sonno")
     dati = cursor.fetchall()
     return render_template("visualizza_sonno.html", dati=dati)
+
+@app.route("/visualizza_nota")
+@login_required
+def visualizza_nota():
+    cursor.execute("SELECT * FROM Nota ORDER BY data DESC, ora DESC")
+    dati = cursor.fetchall()
+    return render_template("visualizza_nota.html", dati=dati)
+
 
 # --- GENERAZIONE REPORT EXCEL
 @app.route("/scarica_report_excel")

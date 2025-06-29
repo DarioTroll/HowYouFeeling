@@ -88,3 +88,10 @@ CREATE TABLE Sonno (
     ora_fine TIME NOT NULL,
     qualita INT
 );
+
+CREATE TABLE Nota (
+    codice INT AUTO_INCREMENT PRIMARY KEY,
+    data DATE NOT NULL,
+    ora TIME NOT NULL,
+    testo TEXT NOT NULL
+);
