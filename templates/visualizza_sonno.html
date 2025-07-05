@@ -15,6 +15,7 @@
             <th>Ora Inizio</th>
             <th>Ora Fine</th>
             <th>Qualità</th>
+            <th>Ore di Sonno</th> <!-- nuova colonna -->
         </tr>
         {% for row in dati %}
         <tr>
@@ -23,6 +24,10 @@
             <td>{{ row["ora_inizio"] }}</td>
             <td>{{ row["ora_fine"] }}</td>
             <td><div class="color-box c{{ row["qualita"] }}"></div></td>
+            <td>
+                {% set ore = row["OreDiSonno"] | float %}
+                {{ ore|int }}h {{ ((ore - (ore|int)) * 60)|round(0)|int }}m
+            </td>
         </tr>
         {% endfor %}
     </table>
@@ -31,4 +36,3 @@
     </div>
 </body>
 </html>
-

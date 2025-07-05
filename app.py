@@ -7,6 +7,7 @@ from openpyxl.styles import Alignment, Font
 from openpyxl.utils import get_column_letter
 from openpyxl.worksheet.table import Table, TableStyleInfo
 from openpyxl import Workbook
+from sleepAmountUpdater import calcola_ore_sonno
 import openpyxl
 import os
 import mysql.connector
@@ -202,10 +203,21 @@ def inserisci_sonno():
         qualita = request.form.get("qualita", 0)
 
         try:
+
+            # Aggiungi i secondi se mancano
+            if len(ora_inizio) == 5:
+                ora_inizio += ":00"
+            if len(ora_fine) == 5:
+                ora_fine += ":00"
+
+            # Calcolo delle ore di sonno
+            ore_di_sonno = calcola_ore_sonno(ora_inizio, ora_fine)
+
             cursor.execute("""
-                INSERT INTO Sonno (data, ora, ora_inizio, ora_fine, qualita)
-                VALUES (%s, %s, %s, %s, %s)
-            """, (data, ora, ora_inizio, ora_fine, qualita))
+                INSERT INTO Sonno (data, ora, ora_inizio, ora_fine, qualita, OreDiSonno)
+                VALUES (%s, %s, %s, %s, %s, %s)
+            """, (data, ora, ora_inizio, ora_fine, qualita, ore_di_sonno))
+            
             conn.commit()
             return jsonify({"success": True, "message": "Inserimento sonno avvenuto con successo!"})
         except Exception as e:
