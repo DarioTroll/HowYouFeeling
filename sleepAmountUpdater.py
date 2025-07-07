@@ -5,39 +5,23 @@ from datetime import datetime, timedelta, time
 # Carica variabili ambiente
 load_dotenv()
 
-def calcola_ore_sonno(ora_inizio, ora_fine) -> float:
-    formato = "%H:%M:%S"
-
-    def to_str(ora, label):
-        if isinstance(ora, time):
-            return ora.strftime(formato)
-        elif isinstance(ora, timedelta):
-            # Converti timedelta in HH:MM:SS
-            total_seconds = int(ora.total_seconds())
-            hours = total_seconds // 3600
-            minutes = (total_seconds % 3600) // 60
-            seconds = total_seconds % 60
-            return f"{hours:02d}:{minutes:02d}:{seconds:02d}"
-        elif isinstance(ora, str):
-            return ora
-        else:
-            raise TypeError(f"{label} deve essere una stringa, time o timedelta (hai {type(ora)})")
-
+def calcola_ore_sonno(datetime_inizio_str, datetime_fine_str):
     try:
-        ora_inizio_str = to_str(ora_inizio, "ora_inizio")
-        ora_fine_str = to_str(ora_fine, "ora_fine")
+        fmt = "%Y-%m-%d %H:%M:%S"
+        dt_inizio = datetime.strptime(datetime_inizio_str, fmt)
+        dt_fine = datetime.strptime(datetime_fine_str, fmt)
 
-        start = datetime.strptime(ora_inizio_str, formato)
-        end = datetime.strptime(ora_fine_str, formato)
+        # Se l'orario di fine è prima dell'inizio, considera il giorno dopo (opzionale)
+        if dt_fine < dt_inizio:
+            dt_fine += timedelta(days=1)
 
-        if end <= start:
-            end += timedelta(days=1)
+        durata = dt_fine - dt_inizio
+        ore = round(durata.total_seconds() / 3600, 2)  # ore con 2 decimali
+        return ore
 
-        durata = end - start
-        return round(durata.total_seconds() / 3600, 2)
     except Exception as e:
-        print(f"[Errore] Calcolo ore fallito per valori: ora_inizio={ora_inizio}, ora_fine={ora_fine} -> {e}")
-        return 0.0
+        print(f"[Errore] Calcolo ore fallito per valori: ora_inizio={datetime_inizio_str}, ora_fine={datetime_fine_str} -> {e}")
+        return 0
 
 # Le funzioni seguenti servono solo per l'esecuzione standalone
 def aggiorna_singola_riga(codice, ora_inizio, ora_fine, cursor):

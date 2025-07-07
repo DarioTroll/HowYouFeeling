@@ -1,29 +1,32 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Visualizza Sonno</title>
+    <title>🛌 Visualizza Sonno</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/show.css') }}">
     <script src="{{ url_for('static', filename='js/dark-mode.js') }}"></script>
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 </head>
 <body>
-    <h2>Dati Sonno</h2>
+    <h2>😴 Registro del Sonno</h2>
+
     <table>
         <tr>
-            <th>Data</th>
-            <th>Ora</th>
-            <th>Ora Inizio</th>
-            <th>Ora Fine</th>
-            <th>Qualità</th>
-            <th>Ore di Sonno</th> <!-- nuova colonna -->
+            <th>📅 Inserimento</th>
+            <th>🌙 Inizio sonno</th>
+            <th>🌞 Fine sonno</th>
+            <th>⭐ Qualità</th>
+            <th>🕒 Durata</th>
         </tr>
+
         {% for row in dati %}
         <tr>
-            <td>{{ row["data"] }}</td>
-            <td>{{ row["ora"] }}</td>
-            <td>{{ row["ora_inizio"] }}</td>
-            <td>{{ row["ora_fine"] }}</td>
-            <td><div class="color-box c{{ row["qualita"] }}"></div></td>
+            <td>{{ row["data"] }} {{ row["ora"] }}</td>
+            <td>{{ row["data_inizio"] }} {{ row["ora_inizio"] }}</td>
+            <td>{{ row["data_fine"] }} {{ row["ora_fine"] }}</td>
+            <td>
+                <div class="color-box c{{ row["qualita"] }}"></div>
+                {{ row["qualita"] }}/5
+            </td>
             <td>
                 {% set ore = row["OreDiSonno"] | float %}
                 {{ ore|int }}h {{ ((ore - (ore|int)) * 60)|round(0)|int }}m
@@ -31,8 +34,9 @@
         </tr>
         {% endfor %}
     </table>
-    <div class="center-button">
-        <a class="button" href="/inserisci_sonno">← Inserisci dati</a>
+
+    <div class="center-button" style="margin-top: 20px;">
+        <a class="button" href="/inserisci_sonno">← Inserisci nuovi dati</a>
     </div>
 </body>
 </html>

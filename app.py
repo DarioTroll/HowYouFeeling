@@ -196,34 +196,58 @@ def inserisci_umore():
 @login_required
 def inserisci_sonno():
     if request.method == "POST":
-        data = request.form.get("data", 0)
-        ora = request.form.get("ora", 0)
-        ora_inizio = request.form.get("ora_inizio", 0)
-        ora_fine = request.form.get("ora_fine", 0)
+        data = request.form.get("data", "")
+        ora = request.form.get("ora", "")
+        data_inizio = request.form.get("data_inizio_sonno", "")
+        ora_inizio = request.form.get("ora_inizio", "")
+        data_fine = request.form.get("data_fine_sonno", "")
+        ora_fine = request.form.get("ora_fine", "")
         qualita = request.form.get("qualita", 0)
 
-        try:
+        # DEBUG: stampa i dati ricevuti
+        print("---- DEBUG: Dati ricevuti ----")
+        print(f"Data inserimento: {data}")
+        print(f"Ora inserimento: {ora}")
+        print(f"Data inizio sonno: {data_inizio}")
+        print(f"Ora inizio sonno: {ora_inizio}")
+        print(f"Data fine sonno: {data_fine}")
+        print(f"Ora fine sonno: {ora_fine}")
+        print(f"Qualità sonno: {qualita}")
 
-            # Aggiungi i secondi se mancano
+        try:
             if len(ora_inizio) == 5:
                 ora_inizio += ":00"
             if len(ora_fine) == 5:
                 ora_fine += ":00"
+            if len(ora) == 5:
+                ora += ":00"
 
-            # Calcolo delle ore di sonno
-            ore_di_sonno = calcola_ore_sonno(ora_inizio, ora_fine)
+            datetime_inizio = f"{data_inizio} {ora_inizio}"
+            datetime_fine = f"{data_fine} {ora_fine}"
+
+            print(f"Datetime inizio: {datetime_inizio}")
+            print(f"Datetime fine: {datetime_fine}")
+
+            ore_di_sonno = calcola_ore_sonno(datetime_inizio, datetime_fine)
+            print(f"Ore di sonno calcolate: {ore_di_sonno}")
 
             cursor.execute("""
-                INSERT INTO Sonno (data, ora, ora_inizio, ora_fine, qualita, OreDiSonno)
-                VALUES (%s, %s, %s, %s, %s, %s)
-            """, (data, ora, ora_inizio, ora_fine, qualita, ore_di_sonno))
+                INSERT INTO Sonno (data, ora, data_inizio, ora_inizio, data_fine, ora_fine, qualita, OreDiSonno)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+            """, (data, ora, data_inizio, ora_inizio, data_fine, ora_fine, qualita, ore_di_sonno))
             
             conn.commit()
+            print("Inserimento avvenuto con successo.")
+
             return jsonify({"success": True, "message": "Inserimento sonno avvenuto con successo!"})
+
         except Exception as e:
+            print(f"Errore durante l'inserimento: {str(e)}")  # DEBUG errore
             return jsonify({"success": False, "message": f"Errore: {str(e)}"})
 
     return render_template("inserisci_sonno.html")
+
+
 
 @app.route("/inserisci_nota", methods=["GET", "POST"])
 @login_required

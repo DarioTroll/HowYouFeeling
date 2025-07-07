@@ -12,20 +12,25 @@
     <form id="sonnoForm" method="post">
         <table>
             <tr>
-                <td>Data:</td>
-                <td><input type="date" id="data" name="data" required></td>
+                <td>Data e ora inserimento:</td>
+                <td>
+                    <input type="date" id="data" name="data" required>
+                    <input type="time" id="ora" name="ora" required>
+                </td>
             </tr>
             <tr>
-                <td>Ora inserimento:</td>
-                <td><input type="time" id="ora" name="ora" required></td>
+                <td>Data e ora inizio sonno:</td>
+                <td>
+                    <input type="date" id="data_inizio_sonno" name="data_inizio_sonno" required>
+                    <input type="time" name="ora_inizio" required>
+                </td>
             </tr>
             <tr>
-                <td>Ora inizio sonno:</td>
-                <td><input type="time" name="ora_inizio" required></td>
-            </tr>
-            <tr>
-                <td>Ora fine sonno:</td>
-                <td><input type="time" name="ora_fine" required></td>
+                <td>Data e ora fine sonno:</td>
+                <td>
+                    <input type="date" id="data_fine_sonno" name="data_fine_sonno" required>
+                    <input type="time" name="ora_fine" required>
+                </td>
             </tr>
             <tr>
                 <td>Qualità del sonno:</td>
@@ -47,8 +52,10 @@
         <img src="{{ url_for('static', filename='images/sonno.png') }}" alt="Sonno" style="width: 150px; height: 150px; object-fit: cover; border-radius: 8px;">
     </div>
     <script src="{{ url_for('static', filename='js/formSubmitHandler.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/setSonnoDates.js') }}"></script>
     <script>
         handleFormSubmit('sonnoForm', '/inserisci_sonno', { reload: true });
     </script>
+    
 </body>
 </html>
